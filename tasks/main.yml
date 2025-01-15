@@ -1,24 +1,29 @@
 ---
-- name: Enable required RedHat repos for RHEL9 x86_64
-  when: (ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "9")
+- name: Set distro to rhel
+  when: ansible_facts['distribution'] == "RedHat"
+  ansible.builtin.set_fact:
+    distro: "rhel{{ ansible_facts['distribution_major_version'] }}"
+
+- name: Enable required RedHat repos for RHEL
+  when: ansible_facts['distribution'] == "RedHat"
   loop:
-  - rhel-9-for-x86_64-appstream-rpms
-  - rhel-9-for-x86_64-baseos-rpms
-  - codeready-builder-for-rhel-9-x86_64-rpms
+  - "rhel-{{ ansible_facts['distribution_major_version'] }}-for-{{ ansible_facts['architecture'] }}-appstream-rpms"
+  - "rhel-{{ ansible_facts['distribution_major_version'] }}-for-{{ ansible_facts['architecture'] }}-baseos-rpms"
+  - "codeready-builder-for-rhel-{{ ansible_facts['distribution_major_version'] }}-{{ ansible_facts['architecture'] }}-rpms"
   community.general.dnf_config_manager:
     name: "{{ item }}"
     state: enabled
 
-- name: Install EPEL
+- name: Install EPEL repo
   ansible.builtin.dnf:
     name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
     state: present
     disable_gpg_check: True
 
-- name: Add the NVIDIA Repo for RHEL9 x86_64
+- name: Add the NVIDIA Repo for RHEL
   ansible.builtin.uri:
-    url: "https://developer.download.nvidia.com/compute/cuda/repos/rhel9/x86_64/cuda-rhel9.repo"
-    dest: /etc/yum.repos.d/cuda-rhel9.repo
+    url: "https://developer.download.nvidia.com/compute/cuda/repos/{{ distro }}/{{ ansible_facts['architecture'] }}/cuda-{{ distro }}.repo"
+    dest: /etc/yum.repos.d/cuda.repo
     owner: root
     group: root
     mode: "644"
@@ -26,24 +31,21 @@
     - 200
     - 304
 
-- name: Install packages for RHEL9 x86_64
-  when: (ansible_facts['distribution'] == "RedHat" and ansible_facts['distribution_major_version'] == "9")
+- name: Install packages for RHEL
+  when: ansible_facts['distribution'] == "RedHat"
   loop:
   - "kernel-devel-{{ ansible_facts['kernel'] }}"
   - "kernel-headers-{{ ansible_facts['kernel'] }}"
   - gcc
-  - kmod-nvidia-open-dkms
-  - nvidia-driver-cuda
-#  - "@nvidia-driver:open-dkms"
+  - "@nvidia-driver:{{ driver_version }}"
   - cuda-toolkit
   ansible.builtin.dnf:
     name: "{{ item }}"
-    state: present
+    state: latest
 
 - name: Enable persistence service
   ansible.builtin.service:
     name: nvidia-persistenced
-    state: started
     enabled: True
 
 - name: Disable the nouveau drivers

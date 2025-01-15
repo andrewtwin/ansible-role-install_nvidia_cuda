@@ -1,2 +1,2 @@
 ---
-# defaults file for install-nvidia-cuda
+driver_version: open-dkms
