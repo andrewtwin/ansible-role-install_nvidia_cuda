@@ -3,17 +3,19 @@ Role Name
 
 Install one of the pre-compiled Nvidia drivers and cuda-toolkit on RHEL8 or RHEL9
 
+Automates the instructions from
+- https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/
+- https://docs.nvidia.com/cuda/cuda-installation-guide-linux/
+
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
 
 Role Variables
 --------------
 
 `driver_version` - Default "open-dkms"
-One of the precompiled-streams from [https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/index.html#precompiled-streams]
-
+One of the precompiled-streams from  https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/index.html#precompiled-streams 
 
 Dependencies
 ------------
