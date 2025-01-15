@@ -39,6 +39,7 @@ Can test the ouput of `lspci` to only run on nodes with Nvidia GPU hardware
     ansible.builtin.command:
       cmd: "lspci"
 
+  tasks:
   - name: Install CUDA
     when: lspci_result['stdout'] | regex_search('vga.*nvidia', ignorecase=True, multiline=False)
     ansible.builtin.include_role:
