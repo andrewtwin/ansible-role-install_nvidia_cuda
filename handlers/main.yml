@@ -1,0 +1,7 @@
+---
+- name: Run dracut
+  ansible.builtin.command:
+    cmd: dracut --force
+
+- name: Reboot
+  ansible.builtin.reboot:
