@@ -43,7 +43,12 @@
     name: "{{ item }}"
     state: latest
 
-- name: Enable persistence service
+- name: Gather package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: Enable nvidia-persistence service
+  when: ansible_facts['packages']['nvidia-persistenced'] is defined
   ansible.builtin.service:
     name: nvidia-persistenced
     enabled: True
