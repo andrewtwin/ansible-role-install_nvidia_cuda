@@ -1,7 +1,7 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Install one of the pre-compiled Nvidia drivers and cuda-toolkit on RHEL8 or RHEL9
 
 Requirements
 ------------
@@ -11,21 +11,37 @@ Any pre-requisites that may not be covered by Ansible itself or the role should 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+`driver_version` - Default "open-dkms"
+One of the precompiled-streams from [https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/index.html#precompiled-streams]
+
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+- `community.general.dnf_config_manager` module
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+Can test the ouput of `lspci` to only run on nodes with Nvidia GPU hardware
+```
+---
+- name: Install CUDA on nodes with GPUs
+  hosts: managed_nodes
+  become: True
+  gather_facts: True
+  pre_tasks:
+  - name: Check which nodes have NVIDA GPUs
+    register: lspci_result
+    changed_when: False
+    ansible.builtin.command:
+      cmd: "lspci"
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+  - name: Install CUDA
+    when: lspci_result['stdout'] | regex_search('vga.*nvidia', ignorecase=True, multiline=False)
+    ansible.builtin.include_role:
+      name: install-nvidia-cuda
+```
 
 License
 -------
