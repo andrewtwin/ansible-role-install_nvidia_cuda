@@ -10,12 +10,12 @@ Automates the instructions from
 Requirements
 ------------
 
+See Nvidia docs for system requirements.
 
 Role Variables
 --------------
 
-`driver_version` - Default "open-dkms"
-One of the precompiled-streams from  https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/index.html#precompiled-streams 
+`driver_version` - Default "open-dkms". One of the precompiled-streams from  https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/index.html#precompiled-streams 
 
 Dependencies
 ------------
@@ -29,11 +29,11 @@ Can test the ouput of `lspci` to only run on nodes with Nvidia GPU hardware
 ```
 ---
 - name: Install CUDA on nodes with GPUs
-  hosts: managed_nodes
+  hosts: all
   become: True
   gather_facts: True
   pre_tasks:
-  - name: Check which nodes have NVIDA GPUs
+  - name: Check which nodes have NVIDIA GPUs
     register: lspci_result
     changed_when: False
     ansible.builtin.command:
