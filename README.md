@@ -15,8 +15,8 @@ See Nvidia docs for system requirements.
 Role Variables
 --------------
 
-`driver_version` - Default `latest`. One of the dmks or precompiled-streams from https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/index.html#precompiled-streams 
-`allow_autoremove` - Default "False". Should be set to `True` is switching drivers
+`driver_version` - Default `propriety`. `open` for the latest open drivers, `propriety` for the latst propriety drivers, or another value from https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/index.html#precompiled-streams 
+`allow_autoremove` - Default `False`. Should be set to `True` is switching drivers
 
 Dependencies
 ------------
@@ -38,6 +38,7 @@ The `latest`, propriety, pre-compiled drivers should work with older, pre-Turing
   - name: Check which nodes have NVIDIA GPUs
     register: lspci_result
     changed_when: False
+    check_mode: False
     ansible.builtin.command:
       cmd: "lspci"
 
