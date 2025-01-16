@@ -4,6 +4,7 @@
     loop_var: vars_file
   with_first_found:
   - "{{ os_distribution }}.yml"
+  - "{{ os_family }}.yml"
   ansible.builtin.include_vars:
     file: "{{ vars_file }}"
 
