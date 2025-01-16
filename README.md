@@ -1,7 +1,7 @@
-Role Name
+install-nvidia-cuda
 =========
 
-Install pre-compiled or dkms Nvidia drivers and cuda-toolkit on RHEL8, RHEL9, or Ubuntu 24.04.
+Install pre-compiled or dkms Nvidia drivers and cuda-toolkit on RHEL8, RHEL9, Ubuntu 22.04, or Ubuntu 24.04.
 
 Automates the instructions from
 - https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/
@@ -15,8 +15,12 @@ See Nvidia docs for system requirements.
 Role Variables
 --------------
 
-`driver_version` - Default `propriety`. `open` for the latest open drivers, `propriety` for the latst propriety drivers, or another value from https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/index.html#precompiled-streams. Open drivers require a 'Turing' or newer Nvidia GPU.
-`allow_autoremove` - Default `False`. Should be set to `True` is switching drivers
+- `driver_version` - Default `propriety`.  
+  `open` for the latest open drivers.  
+  `propriety` for the latst propriety drivers.  
+   Or another value from https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/index.html#precompiled-streams.  
+   Open drivers require a 'Turing' or newer Nvidia GPU.
+- `allow_autoremove` - Default `False`. Should be set to `True` if switching drivers
 
 Dependencies
 ------------
