@@ -1,15 +1,14 @@
 ---
 - name: Install cude-keyring package
   tags: ubuntu
+  notify: Update apt cache
   ansible.builtin.apt:
     deb: "https://developer.download.nvidia.com/compute/cuda/repos/{{ distro }}/{{ os_arch }}/cuda-keyring_1.1-1_all.deb"
     state: present
     allow_unauthenticated: True 
 
-- name: Update apt cache
-  tags: ubuntu
-  ansible.builtin.apt:
-    update_cache: True
+- name: Run handlers
+  meta: flush_handlers
 
 - name: Install the packages
   tags: ubuntu
