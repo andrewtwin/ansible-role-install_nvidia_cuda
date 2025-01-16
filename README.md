@@ -15,7 +15,7 @@ See Nvidia docs for system requirements.
 Role Variables
 --------------
 
-`driver_version` - Default "open-dkms". One of the precompiled-streams from  https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/index.html#precompiled-streams 
+`driver_version` - Default "open-dkms". One of the dmks or precompiled-streams from https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/index.html#precompiled-streams 
 
 Dependencies
 ------------
@@ -25,7 +25,8 @@ Dependencies
 Example Playbook
 ----------------
 
-Can test the ouput of `lspci` to only run on nodes with Nvidia GPU hardware
+Can test the ouput of `lspci` to only run on nodes with Nvidia GPU hardware.
+The `latest`, propriety, pre-compiled drivers should work with older, pre-Turing, GPUs if required.
 ```
 ---
 - name: Install CUDA on nodes with GPUs
@@ -41,6 +42,8 @@ Can test the ouput of `lspci` to only run on nodes with Nvidia GPU hardware
 
   tasks:
   - name: Install CUDA
+    vars:
+      driver_version: latest
     when: lspci_result['stdout'] | regex_search('vga.*nvidia', ignorecase=True, multiline=False)
     ansible.builtin.include_role:
       name: install-nvidia-cuda
