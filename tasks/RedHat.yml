@@ -13,7 +13,7 @@
   tags: rhel
   when: driver_package | regex_search('dkms', ignorecase=True)
   ansible.builtin.dnf:
-    name: "https://dl.fedoraproject.org/pub/epel/epel-os_release-latest-{{ os_release }}.noarch.rpm"
+    name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ os_release }}.noarch.rpm"
     state: present
     disable_gpg_check: True
 
