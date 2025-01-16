@@ -1,5 +1,5 @@
 ---
-- name: Install cude-keyring package
+- name: Install cuda-keyring package
   tags: ubuntu
   notify: Update apt cache
   ansible.builtin.apt:
