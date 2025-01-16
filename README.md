@@ -1,7 +1,7 @@
 Role Name
 =========
 
-Install one of the pre-compiled Nvidia drivers and cuda-toolkit on RHEL8 or RHEL9
+Install pre-compiled or dkms Nvidia drivers and cuda-toolkit on RHEL8 or RHEL9
 
 Automates the instructions from
 - https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/

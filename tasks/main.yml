@@ -14,7 +14,10 @@
     name: "{{ item }}"
     state: enabled
 
-- name: Install EPEL repo
+- name: Install EPEL repo, required for dkms packages
+  when:
+  - ansible_facts['distribution'] == "RedHat"
+  - driver_version | regex_search('dkms', ignorecase=True)
   ansible.builtin.dnf:
     name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_facts['distribution_major_version'] }}.noarch.rpm"
     state: present
