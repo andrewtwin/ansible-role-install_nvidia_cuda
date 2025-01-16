@@ -15,12 +15,11 @@
   ansible.builtin.include_tasks:
     file: "{{ tasks_file }}"
 
-- name: Gather package facts
-  ansible.builtin.package_facts:
-    manager: auto
+- name: Gather service facts
+  ansible.builtin.service_facts:
 
 - name: Enable nvidia-persistence service
-  when: ansible_facts['packages']['nvidia-persistenced'] is defined
+  when: ansible_facts['services']['nvidia-persistenced.service'] is defined
   ansible.builtin.service:
     name: nvidia-persistenced
     enabled: True

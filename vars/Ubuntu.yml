@@ -1,0 +1,8 @@
+---
+os_release: "{{ ansible_facts['distribution_version'] | replace('.', '') }}"
+distro: "ubuntu{{ os_release }}"
+package_list:
+- "linux-headers-{{ ansible_facts['kernel'] }}"
+- cuda-drivers
+- cuda-toolkit
+- nvidia-gds
