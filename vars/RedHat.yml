@@ -1,0 +1,9 @@
+---
+distro: "rhel{{ os_release }}"
+os_release: "{{ ansible_facts['distribution_major_version'] }}"
+package_list:
+- "kernel-devel-{{ ansible_facts['kernel'] }}"
+- "kernel-headers-{{ ansible_facts['kernel'] }}"
+- gcc
+- "@nvidia-driver:{{ driver_version }}"
+- cuda-toolkit

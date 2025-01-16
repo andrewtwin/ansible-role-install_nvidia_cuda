@@ -3,5 +3,9 @@
   ansible.builtin.command:
     cmd: dracut --force
 
+- name: Update initramfs
+  ansible.builtin.command:
+    cmd: update-initramfs -u
+
 - name: Reboot
   ansible.builtin.reboot:

@@ -15,7 +15,8 @@ See Nvidia docs for system requirements.
 Role Variables
 --------------
 
-`driver_version` - Default "open-dkms". One of the dmks or precompiled-streams from https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/index.html#precompiled-streams 
+`driver_version` - Default "latest". One of the dmks or precompiled-streams from https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/index.html#precompiled-streams 
+`allow_autoremove` - Default "False". Should be set to `True` is switching drivers
 
 Dependencies
 ------------

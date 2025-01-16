@@ -1,0 +1,51 @@
+---
+- name: Enable required RedHat repos for RHEL
+  tags: rhel
+  loop:
+  - "rhel-{{ os_release }}-for-{{ os_arch }}-appstream-rpms"
+  - "rhel-{{ os_release }}-for-{{ os_arch }}-baseos-rpms"
+  - "codeready-builder-for-rhel-{{ os_release }}-{{ os_arch }}-rpms"
+  community.general.dnf_config_manager:
+    name: "{{ item }}"
+    state: enabled
+
+- name: Install EPEL repo, required for dkms packages
+  tags: rhel
+  when: driver_version | regex_search('dkms', ignorecase=True)
+  ansible.builtin.dnf:
+    name: "https://dl.fedoraproject.org/pub/epel/epel-os_release-latest-{{ os_release }}.noarch.rpm"
+    state: present
+    disable_gpg_check: True
+
+- name: Add the NVIDIA Repo for RHEL
+  tags: rhel
+  ansible.builtin.uri:
+    url: "https://developer.download.nvidia.com/compute/cuda/repos/{{ distro }}/{{ os_arch }}/cuda-{{ distro }}.repo"
+    dest: /etc/yum.repos.d/cuda.repo
+    owner: root
+    group: root
+    mode: "644"
+    status_code:
+    - 200
+    - 304
+
+- name: Install packages for RHEL
+  tags: rhel
+  notify: Reboot
+  ansible.builtin.dnf:
+    name: "{{ package_list }}"
+    state: present
+    update_cache: True
+    autoremove: "{{ allow_autoremove }}"
+
+- name: Disable the nouveau drivers
+  tags: rhel
+  notify:
+  - Run dracut
+  - Reboot
+  ansible.builtin.template:
+    src: templates/modprobe.j2  
+    dest: /etc/modprobe.d/blacklist-nouveau.conf
+    owner: root
+    group: root
+    mode: "644"
