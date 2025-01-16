@@ -10,7 +10,8 @@ Automates the instructions from
 Requirements
 ------------
 
-See Nvidia docs for system requirements.
+See Nvidia docs for system requirements.  
+Drivers can take up 15Gb+ on some systems.  
 
 Role Variables
 --------------
