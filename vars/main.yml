@@ -1,2 +1,8 @@
 ---
 # vars file for install-nvidia-cuda
+rhel_packages:
+- "kernel-devel-{{ ansible_facts['kernel'] }}"
+- "kernel-headers-{{ ansible_facts['kernel'] }}"
+- gcc
+- "@nvidia-driver:{{ driver_version }}"
+- cuda-toolkit

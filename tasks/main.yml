@@ -33,15 +33,10 @@
 
 - name: Install packages for RHEL
   when: ansible_facts['distribution'] == "RedHat"
-  loop:
-  - "kernel-devel-{{ ansible_facts['kernel'] }}"
-  - "kernel-headers-{{ ansible_facts['kernel'] }}"
-  - gcc
-  - "@nvidia-driver:{{ driver_version }}"
-  - cuda-toolkit
   ansible.builtin.dnf:
-    name: "{{ item }}"
-    state: latest
+    name: "{{ rhel_packages }}"
+    state: present
+    update_cache: True
 
 - name: Gather package facts
   ansible.builtin.package_facts:
