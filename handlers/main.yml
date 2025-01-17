@@ -12,7 +12,7 @@
 - name: Update apt cache
   tags: ubuntu, debian
   ansible.builtin.apt:
-    update_cache: True
+    update_cache: true
 
 - name: Reboot
   ansible.builtin.reboot:

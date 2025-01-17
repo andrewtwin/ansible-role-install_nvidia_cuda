@@ -10,9 +10,10 @@
   tags: debian
   notify: Update apt cache
   ansible.builtin.apt:
-    deb: "https://developer.download.nvidia.com/compute/cuda/repos/{{ distro }}/{{ os_arch }}/cuda-keyring_1.1-1_all.deb"
+    deb: "https://developer.download.nvidia.com/compute/cuda/repos/\
+         {{ distro }}/{{ os_arch }}/cuda-keyring_1.1-1_all.deb"
     state: present
-    allow_unauthenticated: True 
+    allow_unauthenticated: true
 
 - name: Run handler
   meta: flush_handlers
@@ -24,15 +25,15 @@
   ansible.builtin.apt:
     name: "{{ item }}"
     state: present
-    autoremove: "{{ allow_autoremove }}" 
+    autoremove: "{{ allow_autoremove }}"
 
 - name: Disable the nouveau drivers
   tags: debian
   notify:
-  - Update initramfs
-  - Reboot
+    - Update initramfs
+    - Reboot
   ansible.builtin.template:
-    src: templates/modprobe.j2  
+    src: templates/modprobe.j2
     dest: /etc/modprobe.d/blacklist-nouveau.conf
     owner: root
     group: root
