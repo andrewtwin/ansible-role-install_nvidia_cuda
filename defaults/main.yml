@@ -1,2 +1,3 @@
 ---
-driver_version: open-dkms
+driver_version: propriety
+allow_autoremove: False

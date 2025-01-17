@@ -1,63 +1,27 @@
 ---
-- name: Set distro to rhel
-  when: ansible_facts['distribution'] == "RedHat"
-  ansible.builtin.set_fact:
-    distro: "rhel{{ ansible_facts['distribution_major_version'] }}"
+- name: Source vars for specific distribution
+  loop_control:
+    loop_var: vars_file
+  with_first_found:
+  - "{{ os_distribution }}.yml"
+  - "{{ os_family }}.yml"
+  ansible.builtin.include_vars:
+    file: "{{ vars_file }}"
 
-- name: Enable required RedHat repos for RHEL
-  when: ansible_facts['distribution'] == "RedHat"
-  loop:
-  - "rhel-{{ ansible_facts['distribution_major_version'] }}-for-{{ ansible_facts['architecture'] }}-appstream-rpms"
-  - "rhel-{{ ansible_facts['distribution_major_version'] }}-for-{{ ansible_facts['architecture'] }}-baseos-rpms"
-  - "codeready-builder-for-rhel-{{ ansible_facts['distribution_major_version'] }}-{{ ansible_facts['architecture'] }}-rpms"
-  community.general.dnf_config_manager:
-    name: "{{ item }}"
-    state: enabled
+- name: Source tasks for specific distribution
+  loop_control:
+    loop_var: tasks_file
+  with_first_found:
+  - "{{ os_distribution }}.yml"
+  - "{{ os_family }}.yml"
+  ansible.builtin.include_tasks:
+    file: "{{ tasks_file }}"
 
-- name: Install EPEL repo, required for dkms packages
-  when:
-  - ansible_facts['distribution'] == "RedHat"
-  - driver_version | regex_search('dkms', ignorecase=True)
-  ansible.builtin.dnf:
-    name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_facts['distribution_major_version'] }}.noarch.rpm"
-    state: present
-    disable_gpg_check: True
-
-- name: Add the NVIDIA Repo for RHEL
-  ansible.builtin.uri:
-    url: "https://developer.download.nvidia.com/compute/cuda/repos/{{ distro }}/{{ ansible_facts['architecture'] }}/cuda-{{ distro }}.repo"
-    dest: /etc/yum.repos.d/cuda.repo
-    owner: root
-    group: root
-    mode: "644"
-    status_code:
-    - 200
-    - 304
-
-- name: Install packages for RHEL
-  when: ansible_facts['distribution'] == "RedHat"
-  ansible.builtin.dnf:
-    name: "{{ rhel_packages }}"
-    state: present
-    update_cache: True
-
-- name: Gather package facts
-  ansible.builtin.package_facts:
-    manager: auto
+- name: Gather service facts
+  ansible.builtin.service_facts:
 
 - name: Enable nvidia-persistence service
-  when: ansible_facts['packages']['nvidia-persistenced'] is defined
+  when: ansible_facts['services']['nvidia-persistenced.service'] is defined
   ansible.builtin.service:
     name: nvidia-persistenced
     enabled: True
-
-- name: Disable the nouveau drivers
-  notify:
-  - Run dracut
-  - Reboot
-  ansible.builtin.template:
-    src: templates/modprobe.j2  
-    dest: /etc/modprobe.d/blacklist-nouveau.conf
-    owner: root
-    group: root
-    mode: "644"

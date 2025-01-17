@@ -1,7 +1,19 @@
 ---
 - name: Run dracut
+  tags: rhel
   ansible.builtin.command:
     cmd: dracut --force
 
+- name: Update initramfs
+  tags: ubuntu, debian
+  ansible.builtin.command:
+    cmd: update-initramfs -u
+
+- name: Update apt cache
+  tags: ubuntu, debian
+  ansible.builtin.apt:
+    update_cache: True
+
 - name: Reboot
   ansible.builtin.reboot:
+    msg: "Rebooting to finish Nvidia driver installation"

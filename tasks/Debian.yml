@@ -1,0 +1,39 @@
+---
+- name: Enable contrib apt repository
+  tags: debian
+  notify: Update apt cache
+  ansible.builtin.apt_repository:
+    repo: 'deb http://deb.debian.org/debian/ {{ os_short_name }} contrib'
+    state: present
+
+- name: Install cuda-keyring package
+  tags: debian
+  notify: Update apt cache
+  ansible.builtin.apt:
+    deb: "https://developer.download.nvidia.com/compute/cuda/repos/{{ distro }}/{{ os_arch }}/cuda-keyring_1.1-1_all.deb"
+    state: present
+    allow_unauthenticated: True 
+
+- name: Run handler
+  meta: flush_handlers
+
+- name: Install the packages
+  tags: debian
+  notify: Reboot
+  loop: "{{ package_list }}"
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    autoremove: "{{ allow_autoremove }}" 
+
+- name: Disable the nouveau drivers
+  tags: debian
+  notify:
+  - Update initramfs
+  - Reboot
+  ansible.builtin.template:
+    src: templates/modprobe.j2  
+    dest: /etc/modprobe.d/blacklist-nouveau.conf
+    owner: root
+    group: root
+    mode: "644"

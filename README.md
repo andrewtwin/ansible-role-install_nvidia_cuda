@@ -1,21 +1,34 @@
-Role Name
+install-nvidia-cuda
 =========
 
-Install pre-compiled or dkms Nvidia drivers and cuda-toolkit on RHEL8 or RHEL9
+Install pre-compiled or dkms Nvidia drivers and cuda-toolkit on:  
+- RHEL8
+- RHEL9
+- Ubuntu 22.04
+- Ubuntu 24.04
+- Debian 12
 
-Automates the instructions from
+Other distros in these families may also work.  
+  
+Based on the instructions from:  
 - https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/
 - https://docs.nvidia.com/cuda/cuda-installation-guide-linux/
 
 Requirements
 ------------
 
-See Nvidia docs for system requirements.
+See Nvidia docs for system requirements.  
+Drivers and tool-kit can take up 10Gb+ on some systems.  
 
 Role Variables
 --------------
 
-`driver_version` - Default "open-dkms". One of the dmks or precompiled-streams from https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/index.html#precompiled-streams 
+- `driver_version` - Default `propriety`.  
+  `open` for the latest open drivers.  
+  `propriety` for the latst propriety drivers.  
+   Or another value from https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/index.html#precompiled-streams.  
+   Open drivers require a 'Turing' or newer Nvidia GPU.  
+- `allow_autoremove` - Default `False`. Should be set to `True` if switching drivers  
 
 Dependencies
 ------------
@@ -26,7 +39,7 @@ Example Playbook
 ----------------
 
 Can test the ouput of `lspci` to only run on nodes with Nvidia GPU hardware.
-The `latest`, propriety, pre-compiled drivers should work with older, pre-Turing, GPUs if required.
+The `latest`, propriety, pre-compiled drivers should work with older, pre-Turing, GPUs if required.  
 ```
 ---
 - name: Install CUDA on nodes with GPUs
@@ -37,6 +50,7 @@ The `latest`, propriety, pre-compiled drivers should work with older, pre-Turing
   - name: Check which nodes have NVIDIA GPUs
     register: lspci_result
     changed_when: False
+    check_mode: False
     ansible.builtin.command:
       cmd: "lspci"
 
@@ -52,9 +66,5 @@ The `latest`, propriety, pre-compiled drivers should work with older, pre-Turing
 License
 -------
 
-BSD
+BSD-3-Clause
 
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
