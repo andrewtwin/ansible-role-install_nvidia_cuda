@@ -60,7 +60,7 @@ The propriety, pre-compiled drivers should work with older, pre-Turing, GPUs if 
       driver_version: propriety
     when: lspci_result['stdout'] | regex_search('vga.*nvidia', ignorecase=true, multiline=false)
     ansible.builtin.include_role:
-      name: install-nvidia-cuda
+      name: install_nvidia_cuda
 ```
 
 License
