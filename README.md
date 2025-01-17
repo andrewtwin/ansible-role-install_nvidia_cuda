@@ -10,7 +10,7 @@ Install pre-compiled or dkms Nvidia drivers and cuda-toolkit on:
 
 Other distros in these families may also work.  
   
-Automates the instructions from:  
+Based on the instructions from:  
 - https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/
 - https://docs.nvidia.com/cuda/cuda-installation-guide-linux/
 
@@ -18,7 +18,7 @@ Requirements
 ------------
 
 See Nvidia docs for system requirements.  
-Drivers can take up 15Gb+ on some systems.  
+Drivers can take up 10Gb+ on some systems.  
 
 Role Variables
 --------------
