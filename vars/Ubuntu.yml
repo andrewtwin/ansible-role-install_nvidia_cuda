@@ -2,9 +2,9 @@
 os_release: "{{ ansible_facts['distribution_version'] | replace('.', '') }}"
 os_short_name: "{{ ansible_facts['distribution_release'] }}"
 distro: "ubuntu{{ os_release }}"
-driver_package: "{% if driver_version == 'open'%}nvidia-open{%
-                    elif driver_version == 'propriety' %}cuda-drivers{%
-                    else %}{{ driver_version }}{% endif %}"
+driver_package: "{% if driver_version == 'open'%}nvidia-open\
+                {% elif driver_version == 'propriety' %}cuda-drivers\
+                {% else %}{{ driver_version }}{% endif %}"
 package_list:
   - "linux-headers-{{ ansible_facts['kernel'] }}"
   - "{{ driver_package }}"

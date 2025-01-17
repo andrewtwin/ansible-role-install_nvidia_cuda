@@ -16,7 +16,7 @@
     allow_unauthenticated: true
 
 - name: Run handler
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
 
 - name: Install the packages
   tags: debian

@@ -9,7 +9,7 @@
     allow_unauthenticated: true
 
 - name: Run handlers
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
 
 - name: Install the packages
   tags: ubuntu
