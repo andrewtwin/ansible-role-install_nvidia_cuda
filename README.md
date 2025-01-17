@@ -1,9 +1,16 @@
 install-nvidia-cuda
 =========
 
-Install pre-compiled or dkms Nvidia drivers and cuda-toolkit on RHEL8, RHEL9, Ubuntu 22.04, or Ubuntu 24.04.
+Install pre-compiled or dkms Nvidia drivers and cuda-toolkit on:  
+- RHEL8
+- RHEL9
+- Ubuntu 22.04
+- Ubuntu 24.04
+- Debian 12
 
-Automates the instructions from
+Other distros in these families may also work.  
+  
+Automates the instructions from:  
 - https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/
 - https://docs.nvidia.com/cuda/cuda-installation-guide-linux/
 
@@ -20,8 +27,8 @@ Role Variables
   `open` for the latest open drivers.  
   `propriety` for the latst propriety drivers.  
    Or another value from https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/index.html#precompiled-streams.  
-   Open drivers require a 'Turing' or newer Nvidia GPU.
-- `allow_autoremove` - Default `False`. Should be set to `True` if switching drivers
+   Open drivers require a 'Turing' or newer Nvidia GPU.  
+- `allow_autoremove` - Default `False`. Should be set to `True` if switching drivers  
 
 Dependencies
 ------------
@@ -32,7 +39,7 @@ Example Playbook
 ----------------
 
 Can test the ouput of `lspci` to only run on nodes with Nvidia GPU hardware.
-The `latest`, propriety, pre-compiled drivers should work with older, pre-Turing, GPUs if required.
+The `latest`, propriety, pre-compiled drivers should work with older, pre-Turing, GPUs if required.  
 ```
 ---
 - name: Install CUDA on nodes with GPUs
