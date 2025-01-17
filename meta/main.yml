@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   namespace: andrewtwin
-  role_name: install-nvidia-cuda
+  role_name: install_nvidia_cuda
   author: Andrew Twin
   description: Install the Nvidia drivers and CUDA tool-kit on Linux.
 
