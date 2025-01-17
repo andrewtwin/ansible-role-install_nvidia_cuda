@@ -57,7 +57,7 @@ The `latest`, propriety, pre-compiled drivers should work with older, pre-Turing
   tasks:
   - name: Install CUDA
     vars:
-      driver_version: latest
+      driver_version: propriety
     when: lspci_result['stdout'] | regex_search('vga.*nvidia', ignorecase=True, multiline=False)
     ansible.builtin.include_role:
       name: install-nvidia-cuda
