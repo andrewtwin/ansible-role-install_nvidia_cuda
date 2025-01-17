@@ -44,13 +44,13 @@ The `latest`, propriety, pre-compiled drivers should work with older, pre-Turing
 ---
 - name: Install CUDA on nodes with GPUs
   hosts: all
-  become: True
-  gather_facts: True
+  become: true
+  gather_facts: true
   pre_tasks:
   - name: Check which nodes have NVIDIA GPUs
     register: lspci_result
-    changed_when: False
-    check_mode: False
+    changed_when: false
+    check_mode: false
     ansible.builtin.command:
       cmd: "lspci"
 
@@ -58,7 +58,7 @@ The `latest`, propriety, pre-compiled drivers should work with older, pre-Turing
   - name: Install CUDA
     vars:
       driver_version: propriety
-    when: lspci_result['stdout'] | regex_search('vga.*nvidia', ignorecase=True, multiline=False)
+    when: lspci_result['stdout'] | regex_search('vga.*nvidia', ignorecase=true, multiline=false)
     ansible.builtin.include_role:
       name: install-nvidia-cuda
 ```
