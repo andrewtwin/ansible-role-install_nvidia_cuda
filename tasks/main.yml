@@ -3,8 +3,8 @@
   loop_control:
     loop_var: vars_file
   with_first_found:
-  - "{{ os_distribution }}.yml"
-  - "{{ os_family }}.yml"
+    - "{{ os_distribution }}.yml"
+    - "{{ os_family }}.yml"
   ansible.builtin.include_vars:
     file: "{{ vars_file }}"
 
@@ -12,8 +12,8 @@
   loop_control:
     loop_var: tasks_file
   with_first_found:
-  - "{{ os_distribution }}.yml"
-  - "{{ os_family }}.yml"
+    - "{{ os_distribution }}.yml"
+    - "{{ os_family }}.yml"
   ansible.builtin.include_tasks:
     file: "{{ tasks_file }}"
 
@@ -24,4 +24,4 @@
   when: ansible_facts['services']['nvidia-persistenced.service'] is defined
   ansible.builtin.service:
     name: nvidia-persistenced
-    enabled: True
+    enabled: true
