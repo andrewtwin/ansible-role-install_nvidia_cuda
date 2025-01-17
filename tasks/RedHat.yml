@@ -11,7 +11,7 @@
     community.general.dnf_config_manager:
       name: "{{ item }}"
       state: enabled
-  
+
   - name: Install EPEL repo
     tags: rhel
     ansible.builtin.dnf:
