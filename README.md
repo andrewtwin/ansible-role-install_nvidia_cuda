@@ -25,9 +25,9 @@ Role Variables
 
 - `driver_version` - Default `propriety`.  
   `open` for the latest open drivers.  
-  `propriety` for the latst propriety drivers.  
+  `propriety` for the latest propriety drivers.  
    Or another value from https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/index.html#precompiled-streams.  
-   Open drivers require a 'Turing' or newer Nvidia GPU.  
+   Open drivers require a 'Turing' (RTX 20xx, 16xx, etc.) or newer Nvidia GPU.  
 - `allow_autoremove` - Default `False`. Should be set to `True` if switching drivers  
 
 Dependencies
@@ -39,7 +39,7 @@ Example Playbook
 ----------------
 
 Can test the ouput of `lspci` to only run on nodes with Nvidia GPU hardware.
-The `latest`, propriety, pre-compiled drivers should work with older, pre-Turing, GPUs if required.  
+The propriety, pre-compiled drivers should work with older, pre-Turing, GPUs if required.  
 ```
 ---
 - name: Install CUDA on nodes with GPUs
