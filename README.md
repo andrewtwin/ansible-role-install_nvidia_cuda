@@ -18,7 +18,7 @@ Requirements
 ------------
 
 See Nvidia docs for system requirements.  
-Drivers can take up 10Gb+ on some systems.  
+Drivers and tool-kit can take up 10Gb+ on some systems.  
 
 Role Variables
 --------------
