@@ -10,7 +10,8 @@
   tags: debian
   notify: Update apt cache
   ansible.builtin.apt:
-    deb: "https://developer.download.nvidia.com/compute/cuda/repos/{{ distro }}/{{ os_arch }}/cuda-keyring_1.1-1_all.deb"
+    deb: "https://developer.download.nvidia.com/compute/cuda/repos/\
+         {{ distro }}/{{ os_arch }}/cuda-keyring_1.1-1_all.deb"
     state: present
     allow_unauthenticated: true
 

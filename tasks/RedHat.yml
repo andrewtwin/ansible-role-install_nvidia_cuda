@@ -15,7 +15,8 @@
     - name: Install EPEL repo
       tags: rhel
       ansible.builtin.dnf:
-        name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ os_release }}.noarch.rpm"
+        name: "https://dl.fedoraproject.org/pub/epel/\
+              epel-release-latest-{{ os_release }}.noarch.rpm"
         state: present
         disable_gpg_check: true
 
@@ -30,7 +31,8 @@
 - name: Add the NVIDIA Repo for RHEL
   tags: rhel
   ansible.builtin.uri:
-    url: "https://developer.download.nvidia.com/compute/cuda/repos/{{ distro }}/{{ os_arch }}/cuda-{{ distro }}.repo"
+    url: "https://developer.download.nvidia.com/compute/cuda/repos/\
+         {{ distro }}/{{ os_arch }}/cuda-{{ distro }}.repo"
     dest: /etc/yum.repos.d/cuda.repo
     owner: root
     group: root
