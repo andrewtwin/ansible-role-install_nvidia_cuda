@@ -13,5 +13,4 @@ galaxy_info:
   - cuda
   - drivers
 
-dependencies:
-- community.general.dnf_config_manager
+dependencies: []

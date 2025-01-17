@@ -1,21 +1,31 @@
 ---
-- name: Enable required RedHat repos for RHEL
-  tags: rhel
-  loop:
-  - "rhel-{{ os_release }}-for-{{ os_arch }}-appstream-rpms"
-  - "rhel-{{ os_release }}-for-{{ os_arch }}-baseos-rpms"
-  - "codeready-builder-for-rhel-{{ os_release }}-{{ os_arch }}-rpms"
-  community.general.dnf_config_manager:
-    name: "{{ item }}"
-    state: enabled
-
-- name: Install EPEL repo, required for dkms packages
-  tags: rhel
+- name: Extra tasks for open drivers
   when: driver_package | regex_search('dkms', ignorecase=True)
-  ansible.builtin.dnf:
-    name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ os_release }}.noarch.rpm"
-    state: present
-    disable_gpg_check: True
+  block:
+  - name: Enable required RedHat repos for open dkms drivers
+    tags: rhel
+    loop:
+    - "rhel-{{ os_release }}-for-{{ os_arch }}-appstream-rpms"
+    - "rhel-{{ os_release }}-for-{{ os_arch }}-baseos-rpms"
+    - "codeready-builder-for-rhel-{{ os_release }}-{{ os_arch }}-rpms"
+    community.general.dnf_config_manager:
+      name: "{{ item }}"
+      state: enabled
+  
+  - name: Install EPEL repo
+    tags: rhel
+    ansible.builtin.dnf:
+      name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ os_release }}.noarch.rpm"
+      state: present
+      disable_gpg_check: True
+
+  - name: Install packages for open dkms drivers
+    tags: rhel
+    ansible.builtin.dnf:
+      name: "{{ open_package_list }}"
+      state: present
+      update_cache: True
+      autoremove: "{{ allow_autoremove }}"
 
 - name: Add the NVIDIA Repo for RHEL
   tags: rhel

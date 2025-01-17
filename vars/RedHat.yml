@@ -4,9 +4,10 @@ distro: "rhel{{ os_release }}"
 driver_package: "{% if driver_version == 'open'%}open-dkms{% 
                     elif driver_version == 'propriety' %}latest{% 
                     else %}{{ driver_version }}{% endif %}"
-package_list:
+open_package_list:
 - "kernel-devel-{{ ansible_facts['kernel'] }}"
 - "kernel-headers-{{ ansible_facts['kernel'] }}"
 - gcc
+package_list:
 - "@nvidia-driver:{{ driver_package }}"
 - cuda-toolkit
