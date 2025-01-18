@@ -1,4 +1,4 @@
 ---
 driver_version: propriety
-install_cuda: true
+cuda_packages: true
 allow_autoremove: false

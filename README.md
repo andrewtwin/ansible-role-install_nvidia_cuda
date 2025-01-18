@@ -28,7 +28,8 @@ Role Variables
   `propriety` for the latest propriety drivers.  
    Or another value from https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/index.html#precompiled-streams.  
    Open drivers require a 'Turing' (RTX 20xx, 16xx, etc.) or newer Nvidia GPU.  
-- `allow_autoremove` - Default `False`. Should be set to `True` if switching drivers  
+- `allow_autoremove` - Default `false`. Should be set to `True` if switching drivers though this is not implemented yet.
+- `cuda_packages` - Default `true`.Install (or remove) the CUDA toolkit packages.  
 
 Dependencies
 ------------

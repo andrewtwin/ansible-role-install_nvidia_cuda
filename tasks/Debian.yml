@@ -18,13 +18,32 @@
 - name: Run handler
   ansible.builtin.meta: flush_handlers
 
-- name: Install the packages
+- name: Install the driver packages
   tags: debian
   notify: Reboot
-  loop: "{{ package_list }}"
+  loop: "{{ driver_package_list }}"
   ansible.builtin.apt:
     name: "{{ item }}"
     state: present
+    autoremove: "{{ allow_autoremove }}"
+
+- name: Install the cuda packages
+  tags: debian
+  notify: Reboot
+  loop: "{{ cuda_package_list }}"
+  when: cuda_packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    autoremove: "{{ allow_autoremove }}"
+
+- name: Remove the cuda packages
+  tags: debian
+  notify: Reboot
+  when: not cuda_packages
+  ansible.builtin.apt:
+    name: "{{ cuda_package_list }}"
+    state: absent
     autoremove: "{{ allow_autoremove }}"
 
 - name: Disable the nouveau drivers
