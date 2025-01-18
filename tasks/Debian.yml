@@ -18,14 +18,51 @@
 - name: Run handler
   ansible.builtin.meta: flush_handlers
 
-- name: Install the driver packages
-  tags: debian
-  notify: Reboot
-  loop: "{{ driver_package_list }}"
-  ansible.builtin.apt:
-    name: "{{ item }}"
-    state: present
-    autoremove: "{{ allow_autoremove }}"
+- name: Install drivers
+  when: driver_packages
+  block:
+
+  - name: Install the driver packages
+    tags: debian
+    notify: Reboot
+    loop: "{{ driver_package_list }}"
+    ansible.builtin.apt:
+      name: "{{ item }}"
+      state: present
+      autoremove: "{{ allow_autoremove }}"
+
+  - name: Disable the nouveau drivers
+    tags: debian
+    notify:
+      - Update initramfs
+      - Reboot
+    ansible.builtin.template:
+      src: templates/modprobe.j2
+      dest: /etc/modprobe.d/blacklist-nouveau.conf
+      owner: root
+      group: root
+      mode: "644"
+
+- name: Remove drivers
+  when: not driver_packages
+  block:
+
+  - name: Remove the driver packages
+    tags: debian
+    notify: Reboot
+    ansible.builtin.apt:
+      name: "{{ driver_package_list }}"
+      state: absent
+      autoremove: "{{ allow_autoremove }}"
+
+  - name: Renable the nouveau drivers
+    tags: debian
+    notify:
+      - Update initramfs
+      - Reboot
+    ansible.builtin.file:
+      path: /etc/modprobe.d/blacklist-nouveau.conf
+      state: absent
 
 - name: Install the cuda packages
   tags: debian
@@ -46,14 +83,3 @@
     state: absent
     autoremove: "{{ allow_autoremove }}"
 
-- name: Disable the nouveau drivers
-  tags: debian
-  notify:
-    - Update initramfs
-    - Reboot
-  ansible.builtin.template:
-    src: templates/modprobe.j2
-    dest: /etc/modprobe.d/blacklist-nouveau.conf
-    owner: root
-    group: root
-    mode: "644"
