@@ -41,14 +41,34 @@
       - 200
       - 304
 
-- name: Install packages for RHEL
+- name: Install driver packages for RHEL
   tags: rhel
   notify: Reboot
   ansible.builtin.dnf:
-    name: "{{ package_list }}"
+    name: "{{ driver_package_list }}"
     state: present
     update_cache: true
     autoremove: "{{ allow_autoremove }}"
+
+- name: Install cuda packages for RHEL
+  tags: rhel
+  notify: Reboot
+  when: install_cuda
+  ansible.builtin.dnf:
+    name: "{{ cuda_package_list }}"
+    state: present
+    update_cache: true
+    autoremove: "{{ allow_autoremove }}"
+
+- name: Remove cuda packages for RHEL
+  tags: rhel
+  notify: Reboot
+  when: not install_cuda
+  ansible.builtin.dnf:
+    name: "{{ cuda_package_list }}"
+    state: absent
+    update_cache: true
+    autoremove: true
 
 - name: Disable the nouveau drivers
   tags: rhel

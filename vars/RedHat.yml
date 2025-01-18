@@ -8,6 +8,7 @@ open_package_list:
   - "kernel-devel-{{ ansible_facts['kernel'] }}"
   - "kernel-headers-{{ ansible_facts['kernel'] }}"
   - gcc
-package_list:
+driver_package_list:
   - "@nvidia-driver:{{ driver_package }}"
-  - cuda-toolkit
+cuda_package_list:
+- cuda-toolkit
