@@ -11,4 +11,4 @@ open_package_list:
 driver_package_list:
   - "@nvidia-driver:{{ driver_package }}"
 cuda_package_list:
-- cuda-toolkit
+  - cuda-toolkit
