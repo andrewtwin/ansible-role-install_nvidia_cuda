@@ -21,7 +21,7 @@
   ansible.builtin.service_facts:
 
 - name: Enable nvidia-persistence service
-  when: ansible_facts['services']['nvidia-persistenced.service'] is defined
+  when: ansible_facts['services']['nvidia-persistenced.service'] is defined and driver_packages
   ansible.builtin.service:
     name: nvidia-persistenced
     enabled: true
