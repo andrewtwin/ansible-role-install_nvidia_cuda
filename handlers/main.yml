@@ -15,5 +15,6 @@
     update_cache: true
 
 - name: Reboot
+  when: inventory_hostname != "localhost"
   ansible.builtin.reboot:
     msg: "Rebooting to finish Nvidia driver installation"
