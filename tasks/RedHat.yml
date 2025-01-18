@@ -1,9 +1,10 @@
 ---
 - name: Extra tasks for open drivers
-  when: driver_package | regex_search('dkms', ignorecase=True)
+  when: driver_package | regex_search('dkms', ignorecase=true)
   block:
     - name: Enable required RedHat repos for open dkms drivers
       tags: rhel
+      when: os_distribution == "RedHat"
       loop:
         - "rhel-{{ os_release }}-for-{{ os_arch }}-appstream-rpms"
         - "rhel-{{ os_release }}-for-{{ os_arch }}-baseos-rpms"
