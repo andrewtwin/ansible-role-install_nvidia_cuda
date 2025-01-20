@@ -1,16 +1,16 @@
 ---
-- name: Extra tasks for open drivers
-  tags: debian
-  when: driver_package | regex_search('open', ignorecase=true)
-  ansible.builtin.apt:
-    name: "{{ open_package_list }}"
-    state: present
-
 - name: Enable contrib apt repository
   tags: debian
   notify: Update apt cache
   ansible.builtin.apt_repository:
     repo: 'deb http://deb.debian.org/debian/ {{ os_short_name }} contrib'
+    state: present
+
+- name: Extra tasks for open drivers
+  tags: debian
+  when: driver_package | regex_search('open', ignorecase=true)
+  ansible.builtin.apt:
+    name: "{{ open_package_list }}"
     state: present
 
 - name: Install cuda-keyring package
