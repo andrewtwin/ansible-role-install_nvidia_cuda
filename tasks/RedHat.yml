@@ -1,9 +1,10 @@
 ---
 - name: Extra tasks for open drivers
-  when: driver_package | regex_search('dkms', ignorecase=True)
+  when: driver_package | regex_search('dkms', ignorecase=true)
   block:
     - name: Enable required RedHat repos for open dkms drivers
       tags: rhel
+      when: os_distribution == "RedHat"
       loop:
         - "rhel-{{ os_release }}-for-{{ os_arch }}-appstream-rpms"
         - "rhel-{{ os_release }}-for-{{ os_arch }}-baseos-rpms"
@@ -41,23 +42,66 @@
       - 200
       - 304
 
-- name: Install packages for RHEL
+- name: Install drivers
+  when: driver_packages
+  block:
+    - name: Install driver packages for RHEL
+      tags: rhel
+      notify: Reboot
+      ansible.builtin.dnf:
+        name: "{{ driver_package_list }}"
+        state: present
+        update_cache: true
+        autoremove: "{{ allow_autoremove }}"
+
+    - name: Disable the nouveau drivers
+      tags: rhel
+      notify:
+        - Run dracut
+        - Reboot
+      ansible.builtin.template:
+        src: templates/modprobe.j2
+        dest: /etc/modprobe.d/blacklist-nouveau.conf
+        owner: root
+        group: root
+        mode: "644"
+
+- name: Remove drivers
+  when: not driver_packages
+  block:
+    - name: Remove driver packages for RHEL
+      tags: rhel
+      notify: Reboot
+      when: not driver_packages
+      ansible.builtin.dnf:
+        name: "{{ driver_package_list }}"
+        state: absent
+        autoremove: "{{ allow_autoremove }}"
+
+    - name: Renable nouveau drivers
+      notify:
+        - Run dracut
+        - Reboot
+      ansible.builtin.file:
+        path: /etc/modprobe.d/blacklist-nouveau.conf
+        state: absent
+
+- name: Install cuda packages for RHEL
   tags: rhel
   notify: Reboot
+  when: cuda_packages
   ansible.builtin.dnf:
-    name: "{{ package_list }}"
+    name: "{{ cuda_package_list }}"
     state: present
     update_cache: true
     autoremove: "{{ allow_autoremove }}"
 
-- name: Disable the nouveau drivers
+- name: Remove cuda packages for RHEL
   tags: rhel
-  notify:
-    - Run dracut
-    - Reboot
-  ansible.builtin.template:
-    src: templates/modprobe.j2
-    dest: /etc/modprobe.d/blacklist-nouveau.conf
-    owner: root
-    group: root
-    mode: "644"
+  notify: Reboot
+  when: not cuda_packages
+  ansible.builtin.dnf:
+    name: "{{ cuda_package_list }}"
+    state: absent
+    update_cache: true
+    autoremove: "{{ allow_autoremove }}"

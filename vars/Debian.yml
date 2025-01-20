@@ -5,7 +5,9 @@ distro: "debian{{ os_release }}"
 driver_package: "{% if driver_version == 'open'%}nvidia-open\
                 {% elif driver_version == 'propriety' %}cuda-drivers\
                 {% else %}{{ driver_version }}{% endif %}"
-package_list:
+open_package_list:
   - "linux-headers-{{ ansible_facts['kernel'] }}"
+driver_package_list:
   - "{{ driver_package }}"
+cuda_package_list:
   - cuda-toolkit

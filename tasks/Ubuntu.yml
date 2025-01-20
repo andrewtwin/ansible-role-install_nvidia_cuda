@@ -1,4 +1,11 @@
 ---
+- name: Extra tasks for open drivers
+  tags: ubuntu
+  when: driver_package | regex_search('open', ignorecase=true)
+  ansible.builtin.apt:
+    name: "{{ open_package_list }}"
+    state: present
+
 - name: Install cuda-keyring package
   tags: ubuntu
   notify: Update apt cache
@@ -11,23 +18,65 @@
 - name: Run handlers
   ansible.builtin.meta: flush_handlers
 
-- name: Install the packages
+- name: Install drivers
+  when: driver_packages
+  block:
+    - name: Install the driver packages
+      tags: ubuntu
+      notify: Reboot
+      loop: "{{ driver_package_list }}"
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        autoremove: "{{ allow_autoremove }}"
+
+    - name: Disable the nouveau drivers
+      tags: ubuntu
+      notify:
+        - Update initramfs
+        - Reboot
+      ansible.builtin.template:
+        src: templates/modprobe.j2
+        dest: /etc/modprobe.d/blacklist-nouveau.conf
+        owner: root
+        group: root
+        mode: "644"
+
+- name: Remove drivers
+  when: not driver_packages
+  block:
+    - name: Remove the driver packages
+      tags: ubuntu
+      notify: Reboot
+      ansible.builtin.apt:
+        name: "{{ driver_package_list }}"
+        state: absent
+        autoremove: "{{ allow_autoremove }}"
+
+    - name: Renable nouveau drivers
+      tags: ubuntu
+      notify:
+        - Update initramfs
+        - Reboot
+      ansible.builtin.file:
+        path: /etc/modprobe.d/blacklist-nouveau.conf
+        state: absent
+
+- name: Install the cuda packages
   tags: ubuntu
   notify: Reboot
-  loop: "{{ package_list }}"
+  loop: "{{ cuda_package_list }}"
+  when: cuda_packages
   ansible.builtin.apt:
     name: "{{ item }}"
     state: present
     autoremove: "{{ allow_autoremove }}"
 
-- name: Disable the nouveau drivers
+- name: Remove the cuda packages
   tags: ubuntu
-  notify:
-    - Update initramfs
-    - Reboot
-  ansible.builtin.template:
-    src: templates/modprobe.j2
-    dest: /etc/modprobe.d/blacklist-nouveau.conf
-    owner: root
-    group: root
-    mode: "644"
+  notify: Reboot
+  when: not cuda_packages
+  ansible.builtin.apt:
+    name: "{{ cuda_package_list }}"
+    state: absent
+    autoremove: "{{ allow_autoremove }}"

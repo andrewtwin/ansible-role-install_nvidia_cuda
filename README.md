@@ -2,17 +2,17 @@ install-nvidia-cuda
 =========
 
 Install pre-compiled or dkms Nvidia drivers and cuda-toolkit on:  
-- RHEL8
-- RHEL9
-- Ubuntu 22.04
-- Ubuntu 24.04
-- Debian 12
+- RHEL8  
+- RHEL9  
+- Ubuntu 22.04  
+- Ubuntu 24.04  
+- Debian 12  
 
 Other distros in these families may also work.  
   
 Based on the instructions from:  
-- https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/
-- https://docs.nvidia.com/cuda/cuda-installation-guide-linux/
+- https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/  
+- https://docs.nvidia.com/cuda/cuda-installation-guide-linux/  
 
 Requirements
 ------------
@@ -28,12 +28,14 @@ Role Variables
   `propriety` for the latest propriety drivers.  
    Or another value from https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/index.html#precompiled-streams.  
    Open drivers require a 'Turing' (RTX 20xx, 16xx, etc.) or newer Nvidia GPU.  
-- `allow_autoremove` - Default `False`. Should be set to `True` if switching drivers  
+- `allow_autoremove` - Default `false`. If autoremove should run when packages are installed or removed.  
+- `driver_packages` - Default `true`. Install (or remove) Nvidia driver packages.  
+- `cuda_packages` - Default `true`. Install (or remove) the CUDA toolkit packages.  
 
 Dependencies
 ------------
 
-- `community.general.dnf_config_manager` module
+- `community.general.dnf_config_manager` module  
 
 Example Playbook
 ----------------
@@ -66,5 +68,5 @@ The propriety, pre-compiled drivers should work with older, pre-Turing, GPUs if 
 License
 -------
 
-BSD-3-Clause
+BSD-3-Clause  
 
