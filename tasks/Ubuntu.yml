@@ -1,4 +1,11 @@
 ---
+- name: Extra tasks for open drivers
+  tags: ubuntu
+  when: driver_package | regex_search('open', ignorecase=true)
+  ansible.builtin.apt:
+    name: "{{ open_package_list }}"
+    state: present
+
 - name: Install cuda-keyring package
   tags: ubuntu
   notify: Update apt cache

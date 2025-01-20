@@ -1,4 +1,11 @@
 ---
+- name: Extra tasks for open drivers
+  tags: debian
+  when: driver_package | regex_search('open', ignorecase=true)
+  ansible.builtin.apt:
+    name: "{{ open_package_list }}"
+    state: present
+
 - name: Enable contrib apt repository
   tags: debian
   notify: Update apt cache
